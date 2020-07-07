@@ -1,6 +1,6 @@
 #include <iostream>
 #include <vector>
-
+#include <stack>
 
 using namespace std;
 
@@ -9,43 +9,37 @@ using namespace std;
 
 
 
-int building(int N,vector<int> v){
-    int count = 0;
-    int standard;
-    int benchmark[N] = {0,};
-
-    for (int i = 0;i < N;i++){
-        int eachcount = 0;
-        standard = v[i];
-        for (int j = i + 1;j < N;j++){
-            if (standard > v[j]){
-                count++;
-                continue;
-            }
-            if (standard <= v[j]){
-                break;
-            }
-        }
-    }
-    
-    return count;
-}
-
-
-
 int main(void){
     iostream::sync_with_stdio(0);
     cin.tie(0);
 
-    int N,h;      
+    int N,h;
+    long long count = 0;      
     cin >> N;
-    vector<int> v;
+    stack<int> s;
     for (int i = 0;i < N;i++){
         cin >> h;
-        v.push_back(h);
+        if (s.size() == 0){
+            s.push(h);
+            continue;
+        }
+        while ((s.size() != 0) &&(s.top() <= h)){
+            s.pop();
+        }
+
+        if ((s.size() != 0) && (s.top() > h)){
+            count = count + s.size();
+            s.push(h);
+            continue;
+        }
+
+        if (s.size() == 0){
+            s.push(h);
+        }
     }
-    cout << building(N,v);
-    
+
+    cout << count;
+
 
     return 0;
 }
